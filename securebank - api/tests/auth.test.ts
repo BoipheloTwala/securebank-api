@@ -128,6 +128,16 @@ describe('POST /auth/refresh', () => {
     refreshToken = loginRes.body.data.tokens.refreshToken;
   });
 
+  it('refreshes token successfully', async () => {
+    const res = await request(app)
+      .post(`${BASE}/refresh`)
+      .send({ refreshToken });
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.tokens).toHaveProperty('accessToken');
+    expect(res.body.data.tokens).toHaveProperty('refreshToken');
+  });
+
   it('returns 401 for invalid refresh token', async () => {
     const res = await request(app)
       .post(`${BASE}/refresh`)

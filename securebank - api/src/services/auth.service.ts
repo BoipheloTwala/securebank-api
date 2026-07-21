@@ -9,8 +9,6 @@ import {
 } from '../utils/hash.utils';
 import {
   signAccessToken,
-  signRefreshToken,
-  verifyRefreshToken,
   getAccessTokenExpirySeconds,
 } from '../utils/jwt.utils';
 import { sanitiseEmail } from '../utils/sanitise.utils';
@@ -132,17 +130,6 @@ export async function refreshTokens(
   ipAddress?: string,
   userAgent?: string
 ): Promise<TokenPair> {
-  let payload;
-  try {
-    payload = verifyRefreshToken(rawRefreshToken);
-  } catch {
-    throw new AppError('Invalid or expired refresh token', 401);
-  }
-
-  if (payload.type !== 'refresh') {
-    throw new AppError('Invalid token type', 401);
-  }
-
   const tokenHash = hashToken(rawRefreshToken);
   const storedToken = await prisma.refreshToken.findUnique({ where: { tokenHash } });
 
@@ -152,7 +139,7 @@ export async function refreshTokens(
 
   await prisma.refreshToken.update({ where: { id: storedToken.id }, data: { isRevoked: true } });
 
-  const user = await prisma.user.findUnique({ where: { id: payload.sub } });
+  const user = await prisma.user.findUnique({ where: { id: storedToken.userId } });
   if (!user || !user.isActive) {
     throw new AppError('User account is inactive', 401);
   }
@@ -181,10 +168,9 @@ async function issueTokenPair(
   userAgent?: string
 ): Promise<TokenPair> {
   const accessToken = signAccessToken(user);
-  const rawRefreshToken = generateSecureToken(48);
-  const refreshToken = signRefreshToken(user);
+  const refreshToken = generateSecureToken(48);
 
-  const tokenHash = hashToken(rawRefreshToken);
+  const tokenHash = hashToken(refreshToken);
 
   const refreshExpiresAt = new Date();
   refreshExpiresAt.setDate(refreshExpiresAt.getDate() + 7);

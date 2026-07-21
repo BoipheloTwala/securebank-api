@@ -8,7 +8,6 @@ datasource db {
 }
 
 enum Role {
-  CUSTOMER
   ADMIN
   AUDITOR
   ANALYST
@@ -117,7 +116,7 @@ model User {
   passwordHash        String
   firstName           String
   lastName            String
-  role                Role      @default(CUSTOMER)
+  role                Role      @default(ANALYST)
   isActive            Boolean   @default(true)
   isEmailVerified     Boolean   @default(false)
   failedLoginAttempts Int       @default(0)

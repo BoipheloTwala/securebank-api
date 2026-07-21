@@ -139,7 +139,7 @@ describe('POST /transactions/transfer', () => {
       .send({
         fromAccountId: checkingAccountId,
         toAccountId: savingsAccountId,
-        amount: 9999999,
+        amount: 999999,
       });
     expect(res.status).toBe(422);
   });

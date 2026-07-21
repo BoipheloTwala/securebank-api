@@ -13,7 +13,7 @@ export async function createRisk(input: CreateRiskInput, createdById: string) {
       status:      input.status ?? 'OPEN',
       dueDate:     input.dueDate ? new Date(input.dueDate) : null,
       createdById,
-      ownerId:     input.ownerId ?? null,
+      ownerId:     input.ownerId ?? createdById,
     },
     include: {
       createdBy: { select: { id: true, firstName: true, lastName: true, email: true } },

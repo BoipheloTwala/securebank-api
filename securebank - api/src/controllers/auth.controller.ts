@@ -18,7 +18,7 @@ import {
  * /auth/register:
  *   post:
  *     tags: [Auth]
- *     summary: Register a new customer account
+ *     summary: Register a new user account
  *     security: []
  *     requestBody:
  *       required: true

@@ -38,7 +38,7 @@ A production-grade, secure REST API for core banking operations: built with Node
 - Helmet security headers (CSP, HSTS, X-Frame, X-XSS, noSniff)
 - Global + per-route rate limiting (auth, transactions)
 - Audit logging for all sensitive operations
-- Role-based access control (CUSTOMER / ADMIN / AUDITOR)
+- Role-based access control (ADMIN / AUDITOR)
 - Request body size limit (10 KB)
 - Sensitive fields stripped from all API responses
 - Atomic database transactions for financial operations
@@ -214,7 +214,7 @@ npm run test:coverage
 | Role | Email | Password |
 |---|---|---|
 | ADMIN | admin@securebank.com | Admin@SecureBank1! |
-| CUSTOMER | customer@securebank.com | Customer@SecureBank1! |
+| AUDITOR | auditor@securebank.com | Auditor@SecureBank1! |
 
 ---
 
