@@ -56,7 +56,7 @@ export async function listUsers(req: Request, res: Response, next: NextFunction)
  */
 export async function getUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const user = await getUserById(req.params.id);
+    const user = await getUserById(req.params.id as string);
     sendSuccess(res, user, 'User retrieved');
   } catch (err) {
     next(err);
@@ -81,7 +81,7 @@ export async function getUser(req: Request, res: Response, next: NextFunction): 
 export async function deactivate(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const adminId = (req as AuthenticatedRequest).user.id;
-    const result = await deactivateUser(req.params.id, adminId);
+    const result = await deactivateUser(req.params.id as string, adminId);
     sendSuccess(res, result, 'User deactivated successfully');
   } catch (err) {
     next(err);
@@ -105,7 +105,7 @@ export async function deactivate(req: Request, res: Response, next: NextFunction
  */
 export async function unlock(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const result = await unlockUser(req.params.id);
+    const result = await unlockUser(req.params.id as string);
     sendSuccess(res, result, 'Account unlocked successfully');
   } catch (err) {
     next(err);

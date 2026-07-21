@@ -88,7 +88,7 @@ export async function listAccounts(req: Request, res: Response, next: NextFuncti
 export async function getAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { id: userId, role } = (req as AuthenticatedRequest).user;
-    const account = await getAccountById(req.params.id, userId, role === 'ADMIN');
+    const account = await getAccountById(req.params.id as string, userId, role === 'ADMIN');
     sendSuccess(res, account, 'Account retrieved');
   } catch (err) {
     next(err);
@@ -113,7 +113,7 @@ export async function getAccount(req: Request, res: Response, next: NextFunction
 export async function getBalance(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { id: userId } = (req as AuthenticatedRequest).user;
-    const balance = await getAccountBalance(req.params.id, userId);
+    const balance = await getAccountBalance(req.params.id as string, userId);
     sendSuccess(res, balance, 'Balance retrieved');
   } catch (err) {
     next(err);

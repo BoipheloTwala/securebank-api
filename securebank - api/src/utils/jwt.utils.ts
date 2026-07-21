@@ -7,7 +7,8 @@ export function signAccessToken(payload: { id: string; email: string; role: Role
   return jwt.sign(
     { sub: payload.id, email: payload.email, role: payload.role, type: 'access' },
     env.JWT_ACCESS_SECRET,
-    { expiresIn: env.JWT_ACCESS_EXPIRES_IN }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { expiresIn: env.JWT_ACCESS_EXPIRES_IN as any }
   );
 }
 
@@ -15,7 +16,8 @@ export function signRefreshToken(payload: { id: string; email: string; role: Rol
   return jwt.sign(
     { sub: payload.id, email: payload.email, role: payload.role, type: 'refresh' },
     env.JWT_REFRESH_SECRET,
-    { expiresIn: env.JWT_REFRESH_EXPIRES_IN }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { expiresIn: env.JWT_REFRESH_EXPIRES_IN as any }
   );
 }
 

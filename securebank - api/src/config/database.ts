@@ -13,11 +13,13 @@ export const prisma =
     ],
   });
 
-prisma.$on('error', (e) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(prisma as any).$on('error', (e: { message: string; target: string }) => {
   logger.error('Prisma error', { message: e.message, target: e.target });
 });
 
-prisma.$on('warn', (e) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(prisma as any).$on('warn', (e: { message: string; target: string }) => {
   logger.warn('Prisma warning', { message: e.message, target: e.target });
 });
 

@@ -174,7 +174,7 @@ export async function getTransaction(
 ): Promise<void> {
   try {
     const { id: userId } = (req as AuthenticatedRequest).user;
-    const transaction = await getTransactionById(req.params.id, userId);
+    const transaction = await getTransactionById(req.params.id as string, userId);
     sendSuccess(res, transaction, 'Transaction retrieved');
   } catch (err) {
     next(err);

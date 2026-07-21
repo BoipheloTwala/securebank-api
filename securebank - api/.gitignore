@@ -34,3 +34,6 @@ prisma/*.db-journal
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Uploaded evidence files (managed via Railway volume in production)
+uploads/

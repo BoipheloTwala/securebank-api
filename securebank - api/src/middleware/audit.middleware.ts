@@ -28,7 +28,8 @@ export function auditLog(action: string, resource: string) {
             ipAddress: req.ip ?? null,
             userAgent: req.headers['user-agent'] ?? null,
             statusCode,
-            metadata: { method: req.method, path: req.path } as Record<string, unknown>,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            metadata: { method: req.method, path: req.path } as any,
           },
         })
         .catch((err: unknown) => {

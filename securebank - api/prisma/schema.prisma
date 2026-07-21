@@ -11,6 +11,77 @@ enum Role {
   CUSTOMER
   ADMIN
   AUDITOR
+  ANALYST
+  GRC_ANALYST
+}
+
+enum RiskStatus {
+  OPEN
+  IN_PROGRESS
+  MITIGATED
+  ACCEPTED
+  CLOSED
+}
+
+enum RiskCategory {
+  TECHNICAL
+  OPERATIONAL
+  COMPLIANCE
+  FINANCIAL
+  REPUTATIONAL
+  STRATEGIC
+}
+
+enum ControlStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IMPLEMENTED
+  DEPRECATED
+}
+
+enum ControlFramework {
+  ISO27001
+  PCIDSS
+  NISTCSF
+  SOX
+  ISO22301
+  GDPR
+}
+
+enum EvidenceType {
+  DOCUMENT
+  IMAGE
+  REPORT
+  LOG
+  SCREENSHOT
+  OTHER
+}
+
+enum EvidenceStatus {
+  PENDING
+  REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum ReportType {
+  RISK
+  COMPLIANCE
+  CONTROLS
+  EVIDENCE
+  AUDIT
+}
+
+enum ReportFormat {
+  PDF
+  XLSX
+  CSV
+}
+
+enum ReportStatus {
+  GENERATING
+  READY
+  FAILED
 }
 
 enum AccountType {
@@ -59,6 +130,10 @@ model User {
   accounts      Account[]
   refreshTokens RefreshToken[]
   auditLogs     AuditLog[]
+  risks         Risk[]        @relation("RiskCreatedBy")
+  ownedRisks    Risk[]        @relation("RiskOwner")
+  evidence      Evidence[]
+  reports       Report[]
 
   @@index([email])
   @@map("users")
@@ -145,4 +220,90 @@ model AuditLog {
   @@index([action])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+model Risk {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  category    RiskCategory @default(TECHNICAL)
+  likelihood  Int          @default(1)
+  impact      Int          @default(1)
+  status      RiskStatus   @default(OPEN)
+  dueDate     DateTime?
+  createdById String
+  ownerId     String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  createdBy User      @relation("RiskCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  owner     User?     @relation("RiskOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  controls  Control[] @relation("ControlRisks")
+
+  @@index([status])
+  @@index([category])
+  @@index([createdById])
+  @@map("risks")
+}
+
+model Control {
+  id            String           @id @default(uuid())
+  title         String
+  description   String?
+  framework     ControlFramework @default(ISO27001)
+  controlRef    String
+  status        ControlStatus    @default(NOT_STARTED)
+  effectiveness Int              @default(0)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  risks    Risk[]     @relation("ControlRisks")
+  evidence Evidence[]
+
+  @@index([framework])
+  @@index([status])
+  @@map("controls")
+}
+
+model Evidence {
+  id           String         @id @default(uuid())
+  title        String
+  type         EvidenceType   @default(DOCUMENT)
+  filePath     String
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  status       EvidenceStatus @default(PENDING)
+  notes        String?
+  uploadedById String
+  controlId    String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  uploadedBy User     @relation(fields: [uploadedById], references: [id], onDelete: Restrict)
+  control    Control? @relation(fields: [controlId], references: [id], onDelete: SetNull)
+
+  @@index([uploadedById])
+  @@index([controlId])
+  @@index([status])
+  @@map("evidence")
+}
+
+model Report {
+  id            String       @id @default(uuid())
+  title         String
+  type          ReportType
+  format        ReportFormat @default(PDF)
+  status        ReportStatus @default(GENERATING)
+  filePath      String?
+  generatedById String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  generatedBy User @relation(fields: [generatedById], references: [id], onDelete: Restrict)
+
+  @@index([generatedById])
+  @@index([type])
+  @@index([createdAt])
+  @@map("reports")
 }
