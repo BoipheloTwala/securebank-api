@@ -1,6 +1,6 @@
 # SecureBank API
 
-A production-grade, secure REST API for core banking operations — built with Node.js, Express, TypeScript, Prisma, and PostgreSQL.
+A production-grade, secure REST API for core banking operations: built with Node.js, Express, TypeScript, Prisma, and PostgreSQL.
 
 ---
 
