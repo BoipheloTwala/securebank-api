@@ -90,35 +90,6 @@ securebank-api/
 
 ## API Endpoints
 
-### Auth `POST /api/v1/auth`
-
-| Method | Route | Auth | Description |
-|---|---|---|---|
-| POST | `/register` | — | Register a new user |
-| POST | `/login` | — | Login, receive access + refresh tokens |
-| POST | `/refresh` | — | Rotate refresh token |
-| POST | `/logout` | Bearer | Revoke refresh token |
-| GET | `/me` | Bearer | Get authenticated user profile |
-
-### Accounts `GET /api/v1/accounts`
-
-| Method | Route | Auth | Description |
-|---|---|---|---|
-| POST | `/` | Bearer | Open a new bank account |
-| GET | `/` | Bearer | List user's accounts |
-| GET | `/:id` | Bearer | Get account details |
-| GET | `/:id/balance` | Bearer | Get account balance |
-
-### Transactions `POST /api/v1/transactions`
-
-| Method | Route | Auth | Description |
-|---|---|---|---|
-| POST | `/deposit` | Bearer | Deposit funds |
-| POST | `/withdraw` | Bearer | Withdraw funds |
-| POST | `/transfer` | Bearer | Transfer between accounts |
-| GET | `/` | Bearer | List transactions (with filters) |
-| GET | `/:id` | Bearer | Get a specific transaction |
-
 ### Admin `GET /api/v1/admin` (ADMIN role only)
 
 | Method | Route | Description |
@@ -212,9 +183,11 @@ npm run test:coverage
 ## Seed Credentials
 
 | Role | Email | Password |
-|---|---|---|
-| ADMIN | admin@securebank.com | Admin@SecureBank1! |
-| AUDITOR | auditor@securebank.com | Auditor@SecureBank1! |
+|------|-------|----------|
+| Administrator | `admin@securebank.com` | `Admin@SecureBank1!` |
+| Security Analyst | `analyst@securebank.com` | `Analyst@SecureBank1!` |
+| GRC Analyst | `grc@securebank.com` | `GrcAnalyst@SecureBank1!` |
+| Auditor | `auditor@securebank.com` | `Auditor@SecureBank1!` |
 
 ---
 
