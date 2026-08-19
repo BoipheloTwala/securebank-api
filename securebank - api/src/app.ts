@@ -65,9 +65,15 @@ app.get('/api-docs.json', (_req, res) => {
   res.json(swaggerSpec);
 });
 
+// Health check endpoint for Render/UptimeRobot
+app.get('/health', (_req, res) => {
+  res.status(200).json({
+    status: 'ok',
+  });
+});
+
 app.use(env.API_PREFIX, routes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
-
 export default app;
